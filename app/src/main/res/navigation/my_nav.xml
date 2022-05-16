@@ -15,6 +15,9 @@
             app:destination="@id/accountFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/main_to_inAccount"
+            app:destination="@id/inAccountFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
@@ -31,10 +34,26 @@
             app:destination="@id/registrationFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/account_to_inAccount"
+            app:destination="@id/inAccountFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.calorimety.fragments.RegistrationFragment"
         android:label="fragment_registration"
-        tools:layout="@layout/fragment_registration" />
+        tools:layout="@layout/fragment_registration" >
+        <action
+            android:id="@+id/reg_to_inAccount"
+            app:destination="@id/inAccountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/inAccountFragment"
+        android:name="com.example.calorimety.fragments.InAccountFragment"
+        android:label="fragment_in_account"
+        tools:layout="@layout/fragment_in_account" >
+        <action
+            android:id="@+id/inAccount_to_main"
+            app:destination="@id/mainFragment" />
+    </fragment>
 </navigation>

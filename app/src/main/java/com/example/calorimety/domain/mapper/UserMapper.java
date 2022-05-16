@@ -11,7 +11,10 @@ public class UserMapper {
     public static User userFromJson(JSONObject jsonObject){
         User user = null;
         try{
-            user = new User(jsonObject.getInt("id"), jsonObject.getString("name"), jsonObject.getString("password"));
+            user = new User(
+                    jsonObject.getInt("id"),
+                    jsonObject.getString("name"),
+                    jsonObject.getString("password"));
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,8 @@
 package com.example.calorimety.domain;
 
 
+import androidx.annotation.NonNull;
+
 public class User {
     private int id;
 
@@ -25,5 +27,16 @@ public class User {
 
     public String getName() {
         return name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "id: "+id+"\n"
+                +"name: "+name;
     }
 }

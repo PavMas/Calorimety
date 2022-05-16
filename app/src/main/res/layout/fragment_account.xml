@@ -28,7 +28,7 @@
         android:text="@string/btn_signIn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_pass" />
+        app:layout_constraintTop_toBottomOf="@+id/et_pass" />
 
     <Button
         android:id="@+id/goReg"
@@ -41,7 +41,7 @@
         app:layout_constraintTop_toBottomOf="@+id/signIn_btn" />
 
     <EditText
-        android:id="@+id/id_log"
+        android:id="@+id/et_log"
         android:layout_width="346dp"
         android:layout_height="54dp"
         android:layout_marginTop="176dp"
@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
-        android:id="@+id/id_pass"
+        android:id="@+id/et_pass"
         android:layout_width="346dp"
         android:layout_height="54dp"
         android:layout_marginTop="32dp"
@@ -64,6 +64,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/id_log" />
+        app:layout_constraintTop_toBottomOf="@+id/et_log" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

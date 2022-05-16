@@ -6,7 +6,8 @@ import com.example.calorimety.domain.User;
  * Created by trifcdr.
  */
 public interface CalorimetryApi {
-    User getUser();
+    void getUser(String name, ServerCallback callback);
     void addUser();
     void deleteUser();
+    void fillGroups();
 }
