@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Calorimety</string>
     <string name="calorycalc">CaloryCalc</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="text_label_1">Главная</string>
     <string name="text_label_2">Аккаунт</string>
@@ -9,4 +8,9 @@
     <string name="hint_pass">Введите пароль</string>
     <string name="btn_signIn">Войти</string>
     <string name="btn_reg">Регестрация</string>
+    <string name="add_meal">Добавить прием пищи</string>
+    <string name="meal_name">Название приема пищи</string>
+    <string name="group_name">Название группы</string>
+    <string name="product_name">Название продукта</string>
+
 </resources>

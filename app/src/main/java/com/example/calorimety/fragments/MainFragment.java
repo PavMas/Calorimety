@@ -25,7 +25,7 @@ public class MainFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_main, container, false);
         btnAdd = view.findViewById(R.id.btn_add);
         btnAdd.setOnClickListener(view1 -> {
-            Navigation.findNavController(view).navigate(R.id.navigateToAccountFragment);
+            Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_addMealFragment);
         });
 
         return view;
