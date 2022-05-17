@@ -1,13 +1,11 @@
 package com.example.calorimety.rest;
 
-import com.example.calorimety.domain.User;
-
 /**
  * Created by trifcdr.
  */
 public interface CalorimetryApi {
-    void getUser(String name, ServerCallback callback);
+    void getUser(String name, ServerCallbackUser callback);
     void addUser();
     void deleteUser();
-    void fillGroups();
+    void fillGroups(ServerCompleteCallback callback);
 }

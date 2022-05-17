@@ -12,14 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.calorimety.MainActivity;
 import com.example.calorimety.R;
-import com.example.calorimety.domain.User;
 import com.example.calorimety.rest.CalorimetryApiVolley;
-import com.example.calorimety.rest.ServerCallback;
 
 
 public class AccountFragment extends Fragment {

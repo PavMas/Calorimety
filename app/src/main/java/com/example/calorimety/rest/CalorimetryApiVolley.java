@@ -3,7 +3,6 @@ package com.example.calorimety.rest;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.room.Room;
 
@@ -13,33 +12,28 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.calorimety.MainActivity;
 import com.example.calorimety.database.AppDB;
+import com.example.calorimety.database.DatabaseCallback;
 import com.example.calorimety.database.ProductItem;
 import com.example.calorimety.domain.Product;
 import com.example.calorimety.domain.ProductGroup;
 import com.example.calorimety.domain.User;
 import com.example.calorimety.domain.mapper.GroupMapper;
 import com.example.calorimety.domain.mapper.UserMapper;
-import com.example.calorimety.fakeDB.FakeDB;
-import com.example.calorimety.fragments.AccountFragment;
-import com.example.calorimety.fragments.MainFragment;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class CalorimetryApiVolley implements CalorimetryApi {
 
     private final Context context;
     public static final String BASE_URL = "http://192.168.1.7:8080";
     private AppDB db;
+
+    List<ProductItem> voids;
 
     public CalorimetryApiVolley(Context context) {
         this.context = context;
@@ -56,7 +50,7 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
 
     @Override
-    public void getUser(final String name, final ServerCallback callback) {
+    public void getUser(final String name, final ServerCallbackUser callback) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         String url = BASE_URL + "/user/" + name;
         JsonObjectRequest objectRequest = new JsonObjectRequest(Request.Method.GET, url, null, response -> {
@@ -75,7 +69,7 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
 
     @Override
-    public void fillGroups() {
+    public void fillGroups(final ServerCompleteCallback callback) {
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         db = Room.databaseBuilder(context, AppDB.class, "productDB").build();
         String url = BASE_URL + "/groups";
@@ -84,12 +78,7 @@ public class CalorimetryApiVolley implements CalorimetryApi {
                 try{
                     JSONObject jsonObject = response.getJSONObject(i);
                     ProductGroup productGroup = new GroupMapper().groupFromJson(jsonObject);
-                    //FakeDB.PRODUCT_GROUPS.add(productGroup);
                     List<Product> list = productGroup.getProductList();
-                    if (list.size() == 0){
-                        ProductItem item = new ProductItem(null, 0, productGroup.getGroup_name());
-                        insert(item);
-                    }
                     for(int j = 0; j < list.size(); j++) {
                         Product product = list.get(j);
                         ProductItem item = new ProductItem(product.getName(), product.getValue(), productGroup.getGroup_name());
@@ -101,6 +90,7 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
                 }
             }
+            callback.onComplete();
         }, errorListener);
         requestQueue.add(arrayRequest);
     }
@@ -117,9 +107,13 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
     private void insert(ProductItem item){
         Thread thread = new Thread(() -> {
-                db.productDao().insert(item);
-        });
+                try {
+                    db.productDao().insert(item);
+                    Log.d("insert", item.toString()+" "+item.group_name);
+                } catch (Exception e) {
+                    db.productDao().update(item);
+                }
+            });
         thread.start();
-
     }
 }

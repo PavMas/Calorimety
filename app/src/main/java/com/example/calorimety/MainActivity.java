@@ -20,6 +20,7 @@ import com.example.calorimety.fragments.AccountFragment;
 import com.example.calorimety.rest.CalorimetryApiVolley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.Objects;
 
@@ -31,14 +32,13 @@ public class MainActivity extends AppCompatActivity {
     int accountFragmentNav2 = R.id.navigateToMainFragment;
     public static String SP_NAME = "SPrefs";
 
+
     @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main);
-        CalorimetryApiVolley apiVolley = new CalorimetryApiVolley(this);
-        apiVolley.fillGroups();
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
         bnv.setOnItemSelectedListener(item -> {
             int id = item.getItemId();

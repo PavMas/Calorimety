@@ -20,6 +20,13 @@ public interface ProductDao {
     @Query("SELECT DISTINCT group_name FROM ProductItem")
     List<String> getGroups();
 
+    @Query("SELECT * FROM ProductItem WHERE group_name =:name")
+    List<ProductItem> getProducts(String name);
+
+    @Query("SELECT * FROM ProductItem WHERE group_name =:name AND name = 'void'")
+    List<ProductItem> getVoidProducts(String name);
+
+
 
 
 

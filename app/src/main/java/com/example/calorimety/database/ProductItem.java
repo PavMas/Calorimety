@@ -8,8 +8,9 @@ import androidx.room.PrimaryKey;
 @Entity
 public class ProductItem {
 
-    @PrimaryKey(autoGenerate = true)
-    public int id;
+    @PrimaryKey
+    @NonNull
+    //public int id;
     public String name;
     public float value;
     public String group_name;
@@ -23,6 +24,6 @@ public class ProductItem {
     @NonNull
     @Override
     public String toString() {
-        return id+", "+name+", "+value+", "+group_name;
+        return name+", "+value+" ккал";
     }
 }
