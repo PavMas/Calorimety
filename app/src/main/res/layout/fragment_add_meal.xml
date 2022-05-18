@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragments.AddMealFragment"
     android:background="@color/dark_grey"
     android:orientation="vertical">
-
+<!--
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:gravity="center"
-        android:padding="12dp"
+        android:padding="8dp"
         android:text="@string/add_meal"
         android:textColor="@android:color/white"
         android:textSize="35sp"
@@ -32,8 +33,8 @@
 
         <LinearLayout
             android:id="@+id/LL_add"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:orientation="vertical"
             android:visibility="invisible">
@@ -58,7 +59,7 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="5dp"
                 android:textColor="@color/white"
                 android:textSize="25sp"
                 android:textStyle="italic" />
@@ -69,7 +70,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="5dp"
                 android:text="@string/group_name"
                 android:textColor="@color/black"
                 android:textSize="25sp"
@@ -83,38 +84,47 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginLeft="50dp"
                 android:layout_marginRight="50dp"
-                android:padding="12dp"
+                android:padding="5dp"
                 android:textAlignment="gravity"
                 android:textColor="@color/white"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="italic" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="8dp"
                 android:gravity="center"
-                android:padding="12dp"
+                android:padding="5dp"
                 android:text="@string/product_name"
                 android:textColor="@color/black"
                 android:textSize="25sp"
                 android:textStyle="bold" />
-
-            <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/sp_product"
-                android:gravity="center"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
-                android:padding="12dp"
-                android:textAlignment="gravity"
-                android:textColor="@color/white"
-                android:textSize="25sp"
-                android:textStyle="italic"
-                />
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/sp_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:textAlignment="gravity"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/add_meal"/>
+
+
+            </LinearLayout>
+
 
             <Button
                 android:id="@+id/bth_add"
@@ -127,21 +137,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/btn_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Button"/>
-
-
+"
         </LinearLayout>
+    </FrameLayout>
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom|center">
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="117dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:text="Button" />
 
     </FrameLayout>
 
 
-
-
-
+-->
 </LinearLayout>

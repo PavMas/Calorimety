@@ -33,6 +33,8 @@ public class CalorimetryApiVolley implements CalorimetryApi {
     public static final String BASE_URL = "http://192.168.1.7:8080";
     private AppDB db;
 
+    int requests = 0;
+
     List<ProductItem> voids;
 
     public CalorimetryApiVolley(Context context) {
@@ -44,9 +46,6 @@ public class CalorimetryApiVolley implements CalorimetryApi {
             Log.d("TSET1", "responseError");
         }
     };
-    User user;
-
-
 
 
     @Override
@@ -79,10 +78,15 @@ public class CalorimetryApiVolley implements CalorimetryApi {
                     JSONObject jsonObject = response.getJSONObject(i);
                     ProductGroup productGroup = new GroupMapper().groupFromJson(jsonObject);
                     List<Product> list = productGroup.getProductList();
+                    requests += list.size();
                     for(int j = 0; j < list.size(); j++) {
                         Product product = list.get(j);
                         ProductItem item = new ProductItem(product.getName(), product.getValue(), productGroup.getGroup_name());
-                        insert(item);
+                        insert(item, () -> {
+                            requests--;
+                            if(requests == 0)
+                                callback.onComplete();
+                        });
                     }
                     Log.d("DB_TEST", "end itters");
                 }
@@ -90,7 +94,6 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
                 }
             }
-            callback.onComplete();
         }, errorListener);
         requestQueue.add(arrayRequest);
     }
@@ -105,13 +108,15 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
     }
 
-    private void insert(ProductItem item){
+    private void insert(ProductItem item, DatabaseCallback callback){
         Thread thread = new Thread(() -> {
                 try {
                     db.productDao().insert(item);
                     Log.d("insert", item.toString()+" "+item.group_name);
+                    callback.onComplete();
                 } catch (Exception e) {
                     db.productDao().update(item);
+                    callback.onComplete();
                 }
             });
         thread.start();

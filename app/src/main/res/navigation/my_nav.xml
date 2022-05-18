@@ -63,5 +63,12 @@
         android:id="@+id/addMealFragment"
         android:name="com.example.calorimety.fragments.AddMealFragment"
         android:label="fragment_add_meal"
-        tools:layout="@layout/fragment_add_meal" />
+        tools:layout="@layout/fragment_add_meal" >
+        <action
+            android:id="@+id/action_addMealFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_addMealFragment_to_accountFragment"
+            app:destination="@id/accountFragment" />
+    </fragment>
 </navigation>

@@ -50,18 +50,25 @@ public class MainActivity extends AppCompatActivity {
                             (NavHostFragment) fragmentManager.getPrimaryNavigationFragment();
                     assert navHostFragment != null;
                     navController = navHostFragment.getNavController();
-                    if(fragment != R.id.mainFragment)
-                    navController.navigate(accountFragmentNav2);
-                    fragment = R.id.mainFragment;
+                    //if(fragment != R.id.mainFragment)
+                    try {
+                        navController.navigate(accountFragmentNav2);
+                    }
+                    catch (Exception ignore){}
+                            //fragment = R.id.mainFragment;
                     break;
                 case R.id.page_2:
                     navHostFragment =
                             (NavHostFragment) fragmentManager.getPrimaryNavigationFragment();
                     assert navHostFragment != null;
                     navController = navHostFragment.getNavController();
-                    if(fragment != R.id.accountFragment)
-                    navController.navigate(accountFragmentNav1);
-                    fragment = R.id.accountFragment;
+                    //if(fragment != R.id.accountFragment)
+                    try {
+                        navController.navigate(accountFragmentNav1);
+                    }
+                    catch (Exception ignore){}
+                       // fragment = R.id.accountFragment;
+
                     break;
             }
             return true;

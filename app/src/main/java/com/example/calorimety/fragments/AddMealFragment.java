@@ -4,8 +4,11 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.os.Handler;
@@ -14,10 +17,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.calorimety.R;
 import com.example.calorimety.adapter.GroupNameSpinnerAdapter;
+import com.example.calorimety.adapter.ProductAdapter;
+import com.example.calorimety.adapter.ProductRV;
 import com.example.calorimety.adapter.ProductsSpinnerAdapter;
 import com.example.calorimety.database.AppDB;
 import com.example.calorimety.database.DatabaseCallback;
@@ -25,6 +31,7 @@ import com.example.calorimety.database.ProductItem;
 import com.example.calorimety.rest.CalorimetryApiVolley;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddMealFragment extends Fragment {
@@ -45,17 +52,33 @@ public class AddMealFragment extends Fragment {
 
     LinearProgressIndicator indicator;
 
+    AppCompatButton addBtn;
+
+    RecyclerView recyclerView;
+
+    ProductAdapter adapter;
+
+    EditText name, weight;
+
+    String product;
+
+    float value;
+
+    List<ProductRV> products = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_add_meal, container, false);
-        layout = view.findViewById(R.id.LL_add);
-        indicator = view.findViewById(R.id.pb_add);
-        apiVolley = new CalorimetryApiVolley(getActivity().getApplicationContext());
-        sp_groupNames = view.findViewById(R.id.sp_group);
-        sp_products = view.findViewById(R.id.sp_product);
+        view = inflater.inflate(R.layout.fragment_add, container, false);
+        init();
         db = Room.databaseBuilder(getContext(), AppDB.class, "productDB").build();
         new MyThread().start();
+        addBtn.setOnClickListener(view1 -> {
+            product = ((ProductItem) sp_products.getSelectedItem()).name;
+            value = ((ProductItem) sp_products.getSelectedItem()).value;
+            products.add(new ProductRV(product, value/100*Float.parseFloat(weight.getText().toString()), Float.parseFloat(weight.getText().toString())));
+            adapter.addItems(products);
+        });
         return  view;
     }
     @SuppressLint("HandlerLeak")
@@ -79,10 +102,8 @@ public class AddMealFragment extends Fragment {
                     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                         getProducts(((String) sp_groupNames.getSelectedItem()));
                     }
-
                     @Override
                     public void onNothingSelected(AdapterView<?> adapterView) {
-
                     }
                 });
                 getProducts(((String) sp_groupNames.getSelectedItem()));
@@ -103,7 +124,6 @@ public class AddMealFragment extends Fragment {
         });
         thread.start();
     }
-
     class MyThread extends Thread{
         @Override
         public void run() {
@@ -117,5 +137,22 @@ public class AddMealFragment extends Fragment {
             }
         ));
         }
+    }
+    private void init(){
+        layout = view.findViewById(R.id.LL_add);
+        indicator = view.findViewById(R.id.pb_add);
+        apiVolley = new CalorimetryApiVolley(getActivity().getApplicationContext());
+        sp_groupNames = view.findViewById(R.id.sp_group);
+        sp_products = view.findViewById(R.id.sp_product);
+        addBtn = view.findViewById(R.id.btn_add);
+        recyclerView = view.findViewById(R.id.rv_products);
+        name = view.findViewById(R.id.et_meal);
+        weight = view.findViewById(R.id.et_weight);
+        setManagerAndAdapter();
+    }
+    private void setManagerAndAdapter(){
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        adapter = new ProductAdapter();
+        recyclerView.setAdapter(adapter);
     }
 }
