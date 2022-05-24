@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
     int fragment;
-    int accountFragmentNav1 = R.id.navigateToAccountFragment;
-    int accountFragmentNav2 = R.id.navigateToMainFragment;
+    static int accountFragmentNav1 = R.id.navigateToAccountFragment;
+    static int accountFragmentNav2 = R.id.navigateToMainFragment;
     public static String SP_NAME = "SPrefs";
+    SharedPreferences preferences;
 
 
     @SuppressLint("NonConstantResourceId")
@@ -39,18 +41,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main);
+        preferences = getSharedPreferences(SP_NAME, MODE_PRIVATE);
         BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
+        if(preferences.contains("username")) {
+            accountFragmentNav1 = R.id.main_to_inAccount;
+            accountFragmentNav2 = R.id.inAccount_to_main;
+        }
         bnv.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
-            NavHostFragment navHostFragment;
-            NavController navController;
+            NavHostFragment navHostFragment =
+                    (NavHostFragment) fragmentManager.getPrimaryNavigationFragment();;
+            assert navHostFragment != null;
+            NavController navController = navHostFragment.getNavController();
             switch (id){
                 case R.id.page_1:
-                    navHostFragment =
-                            (NavHostFragment) fragmentManager.getPrimaryNavigationFragment();
-                    assert navHostFragment != null;
-                    navController = navHostFragment.getNavController();
-                    //if(fragment != R.id.mainFragment)
                     try {
                         navController.navigate(accountFragmentNav2);
                     }
@@ -58,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
                             //fragment = R.id.mainFragment;
                     break;
                 case R.id.page_2:
-                    navHostFragment =
-                            (NavHostFragment) fragmentManager.getPrimaryNavigationFragment();
-                    assert navHostFragment != null;
-                    navController = navHostFragment.getNavController();
                     //if(fragment != R.id.accountFragment)
                     try {
                         navController.navigate(accountFragmentNav1);
@@ -71,11 +71,13 @@ public class MainActivity extends AppCompatActivity {
 
                     break;
             }
+
             return true;
         });
 
     }
-    public void changeAccountFragmentNav(){
+
+    public void changeFragments(){
         if(accountFragmentNav1 == R.id.navigateToAccountFragment)
             accountFragmentNav1 = R.id.main_to_inAccount;
         else
@@ -85,4 +87,6 @@ public class MainActivity extends AppCompatActivity {
         else
             accountFragmentNav2 = R.id.navigateToMainFragment;
     }
+
+
 }

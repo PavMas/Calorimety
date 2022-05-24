@@ -1,12 +1,15 @@
 package com.example.calorimety.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
@@ -20,14 +23,16 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.calorimety.MainActivity;
 import com.example.calorimety.R;
 import com.example.calorimety.adapter.GroupNameSpinnerAdapter;
 import com.example.calorimety.adapter.ProductAdapter;
-import com.example.calorimety.adapter.ProductRV;
 import com.example.calorimety.adapter.ProductsSpinnerAdapter;
-import com.example.calorimety.database.AppDB;
+import com.example.calorimety.database.ProductDB;
 import com.example.calorimety.database.DatabaseCallback;
-import com.example.calorimety.database.ProductItem;
+import com.example.calorimety.database.ProductItemDB;
+import com.example.calorimety.domain.Meal;
+import com.example.calorimety.domain.ProductItem;
 import com.example.calorimety.rest.CalorimetryApiVolley;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
@@ -39,12 +44,12 @@ public class AddMealFragment extends Fragment {
     View view;
 
     private AppCompatSpinner sp_groupNames, sp_products;
-    AppDB db;
+    ProductDB db;
 
     LinearLayout layout;
 
     List<String> list;
-    List<ProductItem> productItems;
+    List<ProductItemDB> productItemDBS;
     GroupNameSpinnerAdapter groupNameSpinnerAdapter;
     ProductsSpinnerAdapter productsSpinnerAdapter;
 
@@ -52,7 +57,7 @@ public class AddMealFragment extends Fragment {
 
     LinearProgressIndicator indicator;
 
-    AppCompatButton addBtn;
+    AppCompatButton addBtn, saveBtn;
 
     RecyclerView recyclerView;
 
@@ -64,20 +69,32 @@ public class AddMealFragment extends Fragment {
 
     float value;
 
-    List<ProductRV> products = new ArrayList<>();
+    List<ProductItem> products = new ArrayList<>();
+
+    SharedPreferences preferences;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_add, container, false);
         init();
-        db = Room.databaseBuilder(getContext(), AppDB.class, "productDB").build();
+        db = Room.databaseBuilder(requireContext(), ProductDB.class, "productDB").build();
         new MyThread().start();
         addBtn.setOnClickListener(view1 -> {
-            product = ((ProductItem) sp_products.getSelectedItem()).name;
-            value = ((ProductItem) sp_products.getSelectedItem()).value;
-            products.add(new ProductRV(product, value/100*Float.parseFloat(weight.getText().toString()), Float.parseFloat(weight.getText().toString())));
+            product = ((ProductItemDB) sp_products.getSelectedItem()).name;
+            value = ((ProductItemDB) sp_products.getSelectedItem()).value;
+            products.add(new ProductItem(product, value/100*Float.parseFloat(weight.getText().toString()), Float.parseFloat(weight.getText().toString())));
             adapter.addItems(products);
+        });
+        saveBtn.setOnClickListener(view1 -> {
+            if(products.size() != 0){
+                preferences = requireActivity().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
+                int uid = preferences.getInt("userid", 0);
+                apiVolley.addMeal(new Meal(uid, name.getText().toString(), products),() -> {
+                    handler.sendEmptyMessage(3);
+                });
+            }
         });
         return  view;
     }
@@ -87,7 +104,7 @@ public class AddMealFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if(msg.what == 1){
-                productsSpinnerAdapter = new ProductsSpinnerAdapter(getActivity(), R.layout.spinner_item, productItems);
+                productsSpinnerAdapter = new ProductsSpinnerAdapter(requireActivity(), R.layout.spinner_item, productItemDBS);
                 sp_products.setAdapter(productsSpinnerAdapter);
             }
             if(msg.what == 0) {
@@ -108,6 +125,8 @@ public class AddMealFragment extends Fragment {
                 });
                 getProducts(((String) sp_groupNames.getSelectedItem()));
             }
+            if(msg.what == 3)
+                Navigation.findNavController(view).navigate(R.id.action_addMealFragment_to_mainFragment);
         }
     };
     private void getNames(DatabaseCallback callback){
@@ -119,7 +138,7 @@ public class AddMealFragment extends Fragment {
     }
     private void getProducts(final String name){
         Thread thread = new Thread(() -> {
-            productItems = db.productDao().getProducts(name);
+            productItemDBS = db.productDao().getProducts(name);
             handler.sendEmptyMessage(1);
         });
         thread.start();
@@ -132,7 +151,7 @@ public class AddMealFragment extends Fragment {
             apiVolley.fillGroups(() ->
                     getNames(() -> {
                 groupNameSpinnerAdapter = new GroupNameSpinnerAdapter(
-                        getActivity(), R.layout.spinner_item, list);
+                        requireActivity(), R.layout.spinner_item, list);
                 handler.sendEmptyMessage(2);
             }
         ));
@@ -141,10 +160,11 @@ public class AddMealFragment extends Fragment {
     private void init(){
         layout = view.findViewById(R.id.LL_add);
         indicator = view.findViewById(R.id.pb_add);
-        apiVolley = new CalorimetryApiVolley(getActivity().getApplicationContext());
+        apiVolley = new CalorimetryApiVolley(requireActivity().getApplicationContext());
         sp_groupNames = view.findViewById(R.id.sp_group);
         sp_products = view.findViewById(R.id.sp_product);
         addBtn = view.findViewById(R.id.btn_add);
+        saveBtn = view.findViewById(R.id.saveBtn);
         recyclerView = view.findViewById(R.id.rv_products);
         name = view.findViewById(R.id.et_meal);
         weight = view.findViewById(R.id.et_weight);

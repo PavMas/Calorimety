@@ -16,17 +16,29 @@ import android.widget.Toast;
 
 import com.example.calorimety.MainActivity;
 import com.example.calorimety.R;
+import com.example.calorimety.domain.User;
 import com.example.calorimety.rest.CalorimetryApiVolley;
+import com.example.calorimety.rest.ServerCallbackUser;
+
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import java.util.Base64;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
 
 
 public class AccountFragment extends Fragment {
 
 
     View view;
-   public EditText tv_name, tv_password;
-    Button btn_signIn;
+    public EditText et_name, et_password;
+    Button btn_signIn, btn_reg;
     CalorimetryApiVolley apiVolley;
     SharedPreferences preferences;
+
+    String salt = "V000SGJ2TnU5ZjRLeXNWaDR0YkkxZz09";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,24 +46,45 @@ public class AccountFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_account, container, false);
 
         btn_signIn = view.findViewById(R.id.signIn_btn);
-        tv_name = view.findViewById(R.id.et_log);
-        tv_password = view.findViewById(R.id.et_pass);
+        btn_reg = view.findViewById(R.id.goReg);
+        et_name = view.findViewById(R.id.et_log);
+        et_password = view.findViewById(R.id.et_pass);
         apiVolley = new CalorimetryApiVolley(getContext());
         btn_signIn.setOnClickListener(view1 -> {
-            apiVolley.getUser(tv_name.getText().toString(), user -> {
-                if(user != null)
-                    if(!user.getPassword().equals(tv_password.getText().toString()))
-                        Toast.makeText(getContext(), "Пароль неверный", Toast.LENGTH_SHORT).show();
-                    else {
-                        preferences = getContext().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt("userid", user.getId());
-                        editor.putString("username", user.getName()).apply();
-                        Toast.makeText(getContext(), "Вход выполнен", Toast.LENGTH_SHORT).show();
-                        ((MainActivity)getContext()).changeAccountFragmentNav();
-                        Navigation.findNavController(view).navigate(R.id.account_to_inAccount);
+            apiVolley.getUser(et_name.getText().toString(), new ServerCallbackUser() {
+                @Override
+                public void onSuccess(User user) {
+                    if(user != null) {
+                        String pass = et_password.getText().toString();
+                        try {
+                            KeySpec spec = new PBEKeySpec(pass.toCharArray(), salt.getBytes(StandardCharsets.UTF_8), 65536, 128);
+                            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+                            byte[] hash = factory.generateSecret(spec).getEncoded();
+                            Base64.Encoder enc = Base64.getEncoder();
+                            if (!user.getPassword().equals(enc.encodeToString(hash)))
+                                Toast.makeText(getContext(), "Пароль неверный", Toast.LENGTH_SHORT).show();
+                            else {
+                                preferences = getContext().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                editor.putInt("userid", user.getId());
+                                editor.putString("username", user.getName()).apply();
+                                Toast.makeText(getContext(), "Вход выполнен", Toast.LENGTH_SHORT).show();
+                                // ((MainActivity)getContext()).changeAccountFragmentNav();
+                                ((MainActivity)requireActivity()).changeFragments();
+                                Navigation.findNavController(view).navigate(R.id.account_to_inAccount);
+                            }
+                        }
+                        catch (Exception ignore){}
                     }
+                }
+                @Override
+                public void onNoUser() {
+                    Toast.makeText(requireContext(), "Такого пользоваьеля не существует", Toast.LENGTH_SHORT).show();
+                }
             });
+        });
+        btn_reg.setOnClickListener(view1 -> {
+            Navigation.findNavController(view).navigate(R.id.account_to_reg);
         });
         return view;
 

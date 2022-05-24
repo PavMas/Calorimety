@@ -12,15 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.calorimety.R;
-import com.example.calorimety.database.ProductItem;
+import com.example.calorimety.database.ProductItemDB;
 
 import java.util.List;
 
-public class ProductsSpinnerAdapter extends ArrayAdapter<ProductItem> {
-    List<ProductItem> list;
+public class ProductsSpinnerAdapter extends ArrayAdapter<ProductItemDB> {
+    List<ProductItemDB> list;
 
 
-    public ProductsSpinnerAdapter(@NonNull Context context, int resource, @NonNull List<ProductItem> objects) {
+    public ProductsSpinnerAdapter(@NonNull Context context, int resource, @NonNull List<ProductItemDB> objects) {
         super(context, resource, objects);
         list = objects;
     }

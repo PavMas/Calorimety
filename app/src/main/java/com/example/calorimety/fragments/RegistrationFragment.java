@@ -1,66 +1,103 @@
 package com.example.calorimety.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.calorimety.MainActivity;
 import com.example.calorimety.R;
+import com.example.calorimety.domain.User;
+import com.example.calorimety.rest.CalorimetryApiVolley;
+import com.example.calorimety.rest.ServerCallbackUser;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RegistrationFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.nio.charset.StandardCharsets;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
+import java.util.Arrays;
+import java.util.Base64;
+
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
 public class RegistrationFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public RegistrationFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RegistrationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RegistrationFragment newInstance(String param1, String param2) {
-        RegistrationFragment fragment = new RegistrationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+     View view;
+     EditText password, username;
+     AppCompatButton button;
+     CalorimetryApiVolley apiVolley;
+     TextView error;
+     String salt = "V000SGJ2TnU5ZjRLeXNWaDR0YkkxZz09";
+     SharedPreferences preferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration, container, false);
+        view = inflater.inflate(R.layout.fragment_registration, container, false);
+        init();
+        button.setOnClickListener(view1 -> {
+            String name = username.getText().toString();
+            String pass = password.getText().toString();
+            if(!pass.equals("")&&!name.equals("")) {
+                apiVolley.getUser(name, new ServerCallbackUser() {
+                    @Override
+                    public void onSuccess(User user) {
+                        error.setTextColor(Color.RED);
+                        error.setText("Пользователь с таким именем уже существует");
+                    }
+                    @Override
+                    public void onNoUser() {
+                        try {
+                            KeySpec spec = new PBEKeySpec(pass.toCharArray(), salt.getBytes(), 65536, 128);
+                            SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+                            byte[] hash = factory.generateSecret(spec).getEncoded();
+                            Base64.Encoder enc = Base64.getEncoder();
+                            apiVolley.addUser(new User(name, enc.encodeToString(hash)), () -> {
+                                preferences = getContext().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = preferences.edit();
+                                apiVolley.getUser(name, new ServerCallbackUser() {
+                                    @Override
+                                    public void onSuccess(User user) {
+                                        editor.putInt("userId", user.getId());
+                                    }
+
+                                    @Override
+                                    public void onNoUser() {
+
+                                    }
+                                });
+                                editor.putString("username", name).apply();
+                                Toast.makeText(getContext(), "Вход выполнен", Toast.LENGTH_SHORT).show();
+                                // ((MainActivity)getContext()).changeAccountFragmentNav();
+                                Navigation.findNavController(view).navigate(R.id.account_to_inAccount);
+                            });
+                        }
+                        catch (Exception ignore){}
+                    }
+                });
+            }
+        });
+        return view;
+    }
+
+    private void init(){
+        apiVolley = new CalorimetryApiVolley(requireActivity().getApplicationContext());
+        username = view.findViewById(R.id.et_name);
+        password = view.findViewById(R.id.et_pass);
+        button = view.findViewById(R.id.regBtn);
+        error = view.findViewById(R.id.tv_err);
     }
 }

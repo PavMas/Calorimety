@@ -7,7 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class ProductItem {
+public class ProductItemDB {
 
     @PrimaryKey
     @NonNull
@@ -17,7 +17,7 @@ public class ProductItem {
     public String group_name;
 
 
-    public ProductItem(String name, float value, String group_name) {
+    public ProductItemDB(String name, float value, String group_name) {
         this.name = name;
         this.value = value;
         this.group_name = group_name;

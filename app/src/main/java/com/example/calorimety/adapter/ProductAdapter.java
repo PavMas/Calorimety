@@ -9,14 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.calorimety.R;
-import com.example.calorimety.database.ProductItem;
+import com.example.calorimety.domain.ProductItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
 
-    private List<ProductRV> list = new ArrayList<>();
+    private List<ProductItem> list = new ArrayList<>();
 
     @NonNull
     @Override
@@ -28,17 +28,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
-        ProductRV productRV = list.get(position);
-        holder.name.setText(productRV.name);
-        holder.weight.setText(productRV.weight+"");
-        holder.kcal.setText(productRV.value+"");
+        ProductItem productItem  = list.get(position);
+        holder.name.setText(productItem.getName());
+        holder.weight.setText(productItem.getWeight()+"");
+        holder.kcal.setText(productItem.getValue()+"");
     }
 
     @Override
     public int getItemCount() {
         return list.size();
     }
-    public void addItems(List<ProductRV> items){
+    public void addItems(List<ProductItem> items){
         list = items;
         notifyDataSetChanged();
     }

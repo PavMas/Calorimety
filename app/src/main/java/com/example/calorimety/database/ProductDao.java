@@ -12,19 +12,19 @@ import java.util.List;
 public interface ProductDao {
 
     @Insert
-    void insert(ProductItem item);
+    void insert(ProductItemDB item);
 
     @Update
-    void update(ProductItem item);
+    void update(ProductItemDB item);
 
-    @Query("SELECT DISTINCT group_name FROM ProductItem")
+    @Query("SELECT DISTINCT group_name FROM ProductItemDB")
     List<String> getGroups();
 
-    @Query("SELECT * FROM ProductItem WHERE group_name =:name")
-    List<ProductItem> getProducts(String name);
+    @Query("SELECT * FROM ProductItemDB WHERE group_name =:name")
+    List<ProductItemDB> getProducts(String name);
 
-    @Query("SELECT * FROM ProductItem WHERE group_name =:name AND name = 'void'")
-    List<ProductItem> getVoidProducts(String name);
+    @Query("SELECT * FROM ProductItemDB WHERE group_name =:name AND name = 'void'")
+    List<ProductItemDB> getVoidProducts(String name);
 
 
 
