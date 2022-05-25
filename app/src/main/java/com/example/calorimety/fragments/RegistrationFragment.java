@@ -82,7 +82,7 @@ public class RegistrationFragment extends Fragment {
                                 editor.putString("username", name).apply();
                                 Toast.makeText(getContext(), "Вход выполнен", Toast.LENGTH_SHORT).show();
                                 // ((MainActivity)getContext()).changeAccountFragmentNav();
-                                Navigation.findNavController(view).navigate(R.id.account_to_inAccount);
+                                Navigation.findNavController(view).navigate(R.id.reg_to_inAccount);
                             });
                         }
                         catch (Exception ignore){}

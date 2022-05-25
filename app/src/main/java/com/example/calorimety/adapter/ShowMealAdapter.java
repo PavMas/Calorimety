@@ -15,9 +15,8 @@ import com.example.calorimety.domain.ProductItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
-
-    private List<ProductItem> list = new ArrayList<>();
+public class ShowMealAdapter extends RecyclerView.Adapter<ProductHolder> {
+    private List<MealItem> list = new ArrayList<>();
 
 
 
@@ -31,10 +30,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
-            ProductItem productItem = list.get(position);
-            holder.name.setText(productItem.getName());
-            holder.weight.setText(productItem.getWeight() + "");
-            holder.kcal.setText(productItem.getValue() + "");
+        MealItem mealItem = list.get(position);
+        holder.name.setText(mealItem.name);
+        holder.weight.setText(mealItem.weight + "");
+        holder.kcal.setText(mealItem.value + "");
     }
 
     @Override
@@ -42,9 +41,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
         return list.size();
     }
     @SuppressLint("NotifyDataSetChanged")
-    public void addItems(List<ProductItem> items){
+    public void addItems(List<MealItem> items){
         list = items;
         notifyDataSetChanged();
     }
-
 }

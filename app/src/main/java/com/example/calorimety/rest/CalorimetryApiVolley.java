@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Room;
 
 import com.android.volley.AuthFailureError;
@@ -34,6 +35,7 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -160,6 +162,8 @@ public class CalorimetryApiVolley implements CalorimetryApi {
                                 callback.onComplete();
                         });
                     }
+                    if(mRequests == 0)
+                        callback.onComplete();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -192,6 +196,16 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
     }
 
+    @Override
+    public void deleteMeal(String name) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = BASE_URL + "/meal/"+name;
+
+        StringRequest request = new StringRequest(Request.Method.DELETE, url, response -> {
+
+        }, errorListener);
+        queue.add(request);
+    }
 
 
     private void insert(ProductItemDB item, DatabaseCallback callback){
@@ -209,8 +223,9 @@ public class CalorimetryApiVolley implements CalorimetryApi {
     }
     private void insertMeal(MealItem item, DatabaseCallback callback){
         Thread thread = new Thread(() -> {
+                    List<String> list = mdb.mealtDao().getMealName();
+                    if(!list.contains(item.mealName))
                     mdb.mealtDao().insert(item);
-                    Log.d("mitem", item.toString());
                     callback.onComplete();
             });
         thread.start();

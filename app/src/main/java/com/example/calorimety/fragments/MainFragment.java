@@ -49,12 +49,15 @@ public class MainFragment extends Fragment {
 
     List<MealListItem> mealListItems = new ArrayList<>();
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_main, container, false);
         init();
-        new MyThread().start();
+        MyThread myThread = new MyThread();
+        myThread.start();
         btnAdd.setOnClickListener(view1 -> {
             Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_addMealFragment);
         });
@@ -67,9 +70,11 @@ public class MainFragment extends Fragment {
         apiVolley = new CalorimetryApiVolley(requireContext());
         btnAdd = view.findViewById(R.id.btn_add);
         recyclerView = view.findViewById(R.id.rv_meal);
-        indicator = (CircularProgressIndicator) view.findViewById(R.id.progress_circ);
+        //indicator = (CircularProgressIndicator) view.findViewById(R.id.progress_circ);
         preferences = requireActivity().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
+
 
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler(){
@@ -77,68 +82,42 @@ public class MainFragment extends Fragment {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if(msg.what == 0) {
-                indicator.setVisibility(CircularProgressIndicator.VISIBLE);
+                //indicator.setVisibility(CircularProgressIndicator.VISIBLE);
             }
             if(msg.what == 1){
-                indicator.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
+                //indicator.setVisibility(View.GONE);
+                //recyclerView.setVisibility(View.VISIBLE);
                 setManagerAndAdapter();
             }
         }
     };
-
     class MyThread extends Thread{
         @Override
         public void run() {
             super.run();
-            handler.sendEmptyMessage(0);
+            //handler.sendEmptyMessage(0);
+            mealListItems.clear();
             apiVolley.fillMeals(preferences.getInt("userid", 0), () -> {
                 db = Room.databaseBuilder(requireContext(), MealDB.class, "mealDB").build();
                 List<String> list = db.mealtDao().getMealName();
-                float totalWeight = 0;
+                float totalWeight;
                 for(String name : list){
+                    totalWeight = 0;
                     List<MealItem> list1 = db.mealtDao().getByName(name);
                     for(MealItem item : list1)
                         totalWeight += item.weight;
                     mealListItems.add(new MealListItem(name, totalWeight, list1));
+                    handler.sendEmptyMessage(1);
                 }
-               handler.sendEmptyMessage(1);
             });
         }
     }
     private void setManagerAndAdapter(){
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false));
-        adapter = new MealAdapter();
+        adapter = new MealAdapter(requireContext());
         adapter.setList(mealListItems);
         recyclerView.setAdapter(adapter);
 
     }
 
-/*
-    @SuppressLint("HandlerLeak")
-    Handler  handler = new Handler(){
-        @Override
-        public void handleMessage(@NonNull Message msg) {
-            super.handleMessage(msg);
-            if(msg.what == 0) {
-                btnAdd.setVisibility(View.GONE);
-                indicator.setVisibility(LinearProgressIndicator.VISIBLE);
-            }
-            if(msg.what == 1){
-                btnAdd.setVisibility(View.VISIBLE);
-                indicator.setVisibility(LinearProgressIndicator.INVISIBLE);
-            }
-        }
-    };
-
-    class MyThread extends Thread{
-        @Override
-        public void run() {
-            super.run();
-            handler.sendEmptyMessage(0);
-            apiVolley.fillGroups(() -> handler.sendEmptyMessage(1));
-        }
-    }
-
- */
 }

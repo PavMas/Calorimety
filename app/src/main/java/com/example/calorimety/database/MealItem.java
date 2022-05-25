@@ -24,6 +24,10 @@ public class MealItem {
     }
 
 
+    public float getValue() {
+        return value;
+    }
+
     @NonNull
     @Override
     public String toString() {

@@ -1,34 +1,25 @@
 package com.example.calorimety;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
-import androidx.navigation.Navigation;
+
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.calorimety.domain.User;
-import com.example.calorimety.fragments.AccountFragment;
-import com.example.calorimety.rest.CalorimetryApiVolley;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager = getSupportFragmentManager();
-    int fragment;
+
     static int accountFragmentNav1 = R.id.navigateToAccountFragment;
     static int accountFragmentNav2 = R.id.navigateToMainFragment;
     public static String SP_NAME = "SPrefs";
@@ -50,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         bnv.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             NavHostFragment navHostFragment =
-                    (NavHostFragment) fragmentManager.getPrimaryNavigationFragment();;
+                    (NavHostFragment) fragmentManager.getPrimaryNavigationFragment();
             assert navHostFragment != null;
             NavController navController = navHostFragment.getNavController();
             switch (id){

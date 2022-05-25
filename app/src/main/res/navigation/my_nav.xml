@@ -17,10 +17,17 @@
             app:exitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/main_to_inAccount"
-            app:destination="@id/inAccountFragment" />
+            app:destination="@id/inAccountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_mainFragment_to_addMealFragment"
-            app:destination="@id/addMealFragment" />
+            app:destination="@id/addMealFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/mainFragment_to_showFragment"
+            app:destination="@id/showFragment" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
@@ -39,7 +46,9 @@
             app:exitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/account_to_inAccount"
-            app:destination="@id/inAccountFragment" />
+            app:destination="@id/inAccountFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -48,7 +57,9 @@
         tools:layout="@layout/fragment_registration" >
         <action
             android:id="@+id/reg_to_inAccount"
-            app:destination="@id/inAccountFragment" />
+            app:destination="@id/inAccountFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/inAccountFragment"
@@ -57,10 +68,14 @@
         tools:layout="@layout/fragment_in_account" >
         <action
             android:id="@+id/inAccount_to_main"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/inAccount_to_account"
-            app:destination="@id/accountFragment" />
+            app:destination="@id/accountFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/addMealFragment"
@@ -69,9 +84,20 @@
         tools:layout="@layout/fragment_add_meal" >
         <action
             android:id="@+id/action_addMealFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_addMealFragment_to_accountFragment"
             app:destination="@id/accountFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showFragment"
+        android:name="com.example.calorimety.fragments.ShowFragment"
+        android:label="fragment_show"
+        tools:layout="@layout/fragment_show" >
+        <action
+            android:id="@+id/show_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 </navigation>

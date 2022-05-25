@@ -12,7 +12,7 @@ public interface CalorimetryApi {
 
     void addUser(User user, ServerCompleteCallback callback);
 
-    //void deleteMeal(String name);
+    void deleteMeal(String name);
 
     void fillGroups(ServerCompleteCallback callback);
 
