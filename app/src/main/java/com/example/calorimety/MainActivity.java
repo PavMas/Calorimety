@@ -2,6 +2,7 @@ package com.example.calorimety;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     static int accountFragmentNav2 = R.id.navigateToMainFragment;
     public static String SP_NAME = "SPrefs";
     SharedPreferences preferences;
+    BottomNavigationView bnv;
 
 
     @SuppressLint("NonConstantResourceId")
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_main);
         preferences = getSharedPreferences(SP_NAME, MODE_PRIVATE);
-        BottomNavigationView bnv = findViewById(R.id.bottom_navigation);
+        bnv = findViewById(R.id.bottom_navigation);
         if(preferences.contains("username")) {
             accountFragmentNav1 = R.id.main_to_inAccount;
             accountFragmentNav2 = R.id.inAccount_to_main;
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.page_1:
                     try {
                         navController.navigate(accountFragmentNav2);
+                        if(accountFragmentNav2 == R.id.registration_to_mainFragment)
+                            accountFragmentNav2 = R.id.navigateToMainFragment;
                     }
                     catch (Exception ignore){}
                             //fragment = R.id.mainFragment;
@@ -79,5 +83,16 @@ public class MainActivity extends AppCompatActivity {
             accountFragmentNav2 = R.id.navigateToMainFragment;
     }
 
+    public void changeFragmentNav(int id1, int id2){
+        accountFragmentNav1 = id1;
+        accountFragmentNav2 = id2;
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+
+    }
 
 }

@@ -3,16 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/act_main"
-    android:background="@color/dark_grey"
+    android:background="?attr/colorOnPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress_circ"
-        android:layout_width="wrap_content"
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/pb_main"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:indeterminate="true"
         android:visibility="invisible" />
 
 
@@ -27,9 +28,13 @@
             android:layout_weight="0.63"
             android:gravity="center"
             android:text="@string/calorycalc"
-            android:textColor="@android:color/white"
+
             android:textSize="30sp"
             android:textStyle="bold" />
+        <View
+            android:layout_width="wrap_content"
+            android:background="@drawable/separator"
+            android:layout_height="3dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_meal"
@@ -39,16 +44,19 @@
             android:padding="12dp"
             android:visibility="invisible"/>
     </LinearLayout>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_add"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_gravity="right|bottom"
-        android:layout_marginBottom="20dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/ic_bt_add"
         android:stateListAnimator="@null"
-        tools:ignore="RtlHardcoded" />
+        tools:ignore="RtlHardcoded,SpeakableTextPresentCheck" />
+
+
 
 
 </FrameLayout>

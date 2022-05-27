@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/showMeal"
-    android:background="@color/dark_grey"
+    android:background="?attr/colorOnPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -14,12 +14,15 @@
         <TextView
             android:id="@+id/tV_meal_name"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.63"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@android:color/white"
+            android:padding="21dp"
             android:textSize="30sp"
             android:textStyle="bold" />
+        <View
+            android:layout_width="wrap_content"
+            android:background="@drawable/separator"
+            android:layout_height="3dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_showMeal"
@@ -27,5 +30,11 @@
             android:layout_height="0dp"
             android:layout_weight="5"
             android:padding="12dp" />
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/showBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backBtn"
+            android:layout_gravity="center"/>
     </LinearLayout>
 </FrameLayout>

@@ -32,8 +32,8 @@ public class ShowMealAdapter extends RecyclerView.Adapter<ProductHolder> {
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
         MealItem mealItem = list.get(position);
         holder.name.setText(mealItem.name);
-        holder.weight.setText(mealItem.weight + "");
-        holder.kcal.setText(mealItem.value + "");
+        holder.weight.setText(mealItem.weight + " г");
+        holder.kcal.setText(mealItem.value + " ккал");
     }
 
     @Override

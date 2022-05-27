@@ -142,28 +142,29 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
 
     @Override
-    public void fillMeals(int uid, ServerCompleteCallback callback) {
+    public void fillMeals(int uid, ServerMealCallback callback) {
         RequestQueue queue = Volley.newRequestQueue(context);
         mdb = Room.databaseBuilder(context, MealDB.class, "mealDB").build();
         String url = BASE_URL+"/user/"+uid+"/meals";
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, response -> {
-            for(int i = 0; i<response.length(); i++){
+            if(response.length() == 0){
+                callback.onNothing();
+            }
+            for (int i = 0; i < response.length(); i++) {
                 try {
                     JSONObject jsonObject = response.getJSONObject(i);
                     Meal meal = new MealMapper().mealFromJson(jsonObject);
                     List<ProductItem> list = meal.getProductItemList();
                     mRequests += list.size();
-                    for(int j = 0; j < list.size(); j++){
+                    for (int j = 0; j < list.size(); j++) {
                         ProductItem item = list.get(j);
                         MealItem mealItem = new MealItem(item.getName(), item.getValue(), item.getWeight(), meal.getName());
                         insertMeal(mealItem, () -> {
                             mRequests--;
-                            if(mRequests == 0)
+                            if (mRequests == 0)
                                 callback.onComplete();
                         });
                     }
-                    if(mRequests == 0)
-                        callback.onComplete();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -203,6 +204,17 @@ public class CalorimetryApiVolley implements CalorimetryApi {
 
         StringRequest request = new StringRequest(Request.Method.DELETE, url, response -> {
 
+        }, errorListener);
+        queue.add(request);
+    }
+
+    @Override
+    public void deleteUser(int id, ServerCompleteCallback callback) {
+        RequestQueue queue = Volley.newRequestQueue(context);
+        String url = BASE_URL + "/user/"+id;
+
+        StringRequest request = new StringRequest(Request.Method.DELETE, url, response -> {
+            callback.onComplete();
         }, errorListener);
         queue.add(request);
     }

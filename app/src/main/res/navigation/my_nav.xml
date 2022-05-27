@@ -27,7 +27,9 @@
             app:exitAnim="@anim/slide_out_right" />
         <action
             android:id="@+id/mainFragment_to_showFragment"
-            app:destination="@id/showFragment" />
+            app:destination="@id/showFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/accountFragment"
@@ -58,6 +60,11 @@
         <action
             android:id="@+id/reg_to_inAccount"
             app:destination="@id/inAccountFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/registration_to_mainFragment"
+            app:destination="@id/mainFragment"
             app:enterAnim="@anim/slide_in_left"
             app:exitAnim="@anim/slide_out_right" />
     </fragment>
@@ -98,6 +105,8 @@
         tools:layout="@layout/fragment_show" >
         <action
             android:id="@+id/show_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right" />
     </fragment>
 </navigation>

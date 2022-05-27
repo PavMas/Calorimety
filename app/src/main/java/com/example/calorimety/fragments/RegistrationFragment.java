@@ -71,7 +71,11 @@ public class RegistrationFragment extends Fragment {
                                 apiVolley.getUser(name, new ServerCallbackUser() {
                                     @Override
                                     public void onSuccess(User user) {
-                                        editor.putInt("userId", user.getId());
+                                        editor.putInt("userid", user.getId());
+                                        editor.putString("username", name).apply();
+                                        Toast.makeText(getContext(), "Вход выполнен", Toast.LENGTH_SHORT).show();
+                                        ((MainActivity)getContext()).changeFragmentNav(R.id.main_to_inAccount, R.id.inAccount_to_main);
+                                        Navigation.findNavController(view).navigate(R.id.reg_to_inAccount);
                                     }
 
                                     @Override
@@ -79,10 +83,6 @@ public class RegistrationFragment extends Fragment {
 
                                     }
                                 });
-                                editor.putString("username", name).apply();
-                                Toast.makeText(getContext(), "Вход выполнен", Toast.LENGTH_SHORT).show();
-                                // ((MainActivity)getContext()).changeAccountFragmentNav();
-                                Navigation.findNavController(view).navigate(R.id.reg_to_inAccount);
                             });
                         }
                         catch (Exception ignore){}

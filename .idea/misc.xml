@@ -3,10 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1995" />
         <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/drawable/ic_bt_add.xml" value="0.2365" />
         <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/drawable/ic_recycler_view.xml" value="0.2365" />
         <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/drawable/icon_1.xml" value="0.2365" />
         <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/drawable/icon_2.xml" value="0.2365" />
+        <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/drawable/separator.xml" value="0.194" />
         <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/layout/activity_main.xml" value="0.358695652173913" />
         <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/layout/fragment_account.xml" value="0.33" />
         <entry key="..\:/Users/pasha/AndroidStudioProjects/Calorimety/app/src/main/res/layout/fragment_add.xml" value="0.2759815242494226" />
@@ -28,5 +30,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.19166666666666668" />
+      </ProjectState>
+    </option>
   </component>
 </project>

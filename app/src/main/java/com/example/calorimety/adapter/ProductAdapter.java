@@ -33,8 +33,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
             ProductItem productItem = list.get(position);
             holder.name.setText(productItem.getName());
-            holder.weight.setText(productItem.getWeight() + "");
-            holder.kcal.setText(productItem.getValue() + "");
+            holder.weight.setText(productItem.getWeight() + " г");
+            holder.kcal.setText(productItem.getValue() + " ккал");
     }
 
     @Override

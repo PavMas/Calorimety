@@ -21,7 +21,6 @@ import com.example.calorimety.rest.CalorimetryApiVolley;
 import com.example.calorimety.rest.ServerCallbackUser;
 
 import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 import java.util.Base64;
 
@@ -70,7 +69,7 @@ public class AccountFragment extends Fragment {
                                 editor.putString("username", user.getName()).apply();
                                 Toast.makeText(getContext(), "Вход выполнен", Toast.LENGTH_SHORT).show();
                                 // ((MainActivity)getContext()).changeAccountFragmentNav();
-                                ((MainActivity)requireActivity()).changeFragments();
+                                ((MainActivity)requireActivity()).changeFragmentNav(R.id.main_to_inAccount, R.id.inAccount_to_main);
                                 Navigation.findNavController(view).navigate(R.id.account_to_inAccount);
                             }
                         }
@@ -84,6 +83,7 @@ public class AccountFragment extends Fragment {
             });
         });
         btn_reg.setOnClickListener(view1 -> {
+            ((MainActivity)requireContext()).changeFragmentNav(R.id.navigateToAccountFragment, R.id.registration_to_mainFragment);
             Navigation.findNavController(view).navigate(R.id.account_to_reg);
         });
         return view;

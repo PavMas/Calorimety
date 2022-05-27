@@ -8,7 +8,7 @@
     <string name="hint_pass">Введите пароль</string>
     <string name="btn_signIn">Войти</string>
     <string name="btn_reg">Регестрация</string>
-    <string name="add_meal">Добавить прием пищи</string>
+    <string name="add_meal">New Meal</string>
     <string name="meal_name">Название:</string>
     <string name="group_name">Название группы:</string>
     <string name="product_name">Название продукта:</string>
@@ -21,5 +21,8 @@
     <string name="btn_signOut">Выйти из аккаунта</string>
     <string name="description">Подробнее</string>
     <string name="delete">Удалить</string>
+    <string name="backBtn">Назад</string>
+    <string name="registration">Регистрация</string>
+    <string name="deleteAcc">Удалить аккаунт</string>
 
 </resources>
