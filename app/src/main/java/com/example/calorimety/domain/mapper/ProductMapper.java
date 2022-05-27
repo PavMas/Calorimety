@@ -1,8 +1,6 @@
 package com.example.calorimety.domain.mapper;
 
 import com.example.calorimety.domain.Product;
-import com.example.calorimety.domain.User;
-import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;

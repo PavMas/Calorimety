@@ -63,7 +63,7 @@ public class AccountFragment extends Fragment {
                             if (!user.getPassword().equals(enc.encodeToString(hash)))
                                 Toast.makeText(getContext(), "Пароль неверный", Toast.LENGTH_SHORT).show();
                             else {
-                                preferences = getContext().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
+                                preferences = requireContext().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = preferences.edit();
                                 editor.putInt("userid", user.getId());
                                 editor.putString("username", user.getName()).apply();

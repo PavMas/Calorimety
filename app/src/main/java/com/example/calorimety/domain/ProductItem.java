@@ -2,9 +2,9 @@ package com.example.calorimety.domain;
 
 
 public class ProductItem {
-    private String name;
-    private float value;
-    private float weight;
+    private final String name;
+    private final float value;
+    private final float weight;
 
 
     public ProductItem(String name, float value, float weight) {

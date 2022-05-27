@@ -28,7 +28,6 @@ import com.example.calorimety.database.MealDB;
 import com.example.calorimety.database.MealItem;
 import com.example.calorimety.rest.CalorimetryApiVolley;
 import com.example.calorimety.rest.ServerMealCallback;
-import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 
 import java.util.ArrayList;
@@ -60,16 +59,12 @@ public class MainFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_main, container, false);
         init();
         if (preferences.contains("userid")) {
-            MyThread myThread = new MyThread();
-            myThread.start();
-            btnAdd.setOnClickListener(view1 -> {
-                Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_addMealFragment);
-            });
+            threadSleep();
+            btnAdd.setOnClickListener(view1 -> Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_addMealFragment));
         }
         else
-            btnAdd.setOnClickListener(view1 -> {
-                Toast.makeText(requireContext(), "Пожалуйста, войдите в аккаунт", Toast.LENGTH_SHORT).show();
-            });
+            btnAdd.setOnClickListener(view1 ->
+                Toast.makeText(requireContext(), "Пожалуйста, войдите в аккаунт", Toast.LENGTH_SHORT).show());
         return view;
     }
 
@@ -110,13 +105,13 @@ public class MainFragment extends Fragment {
                 public void onComplete() {
                     db = Room.databaseBuilder(requireContext(), MealDB.class, "mealDB").build();
                     List<String> list = db.mealtDao().getMealName();
-                    float totalWeight;
+                    float totalValue;
                     for(String name : list){
-                        totalWeight = 0;
+                        totalValue = 0;
                         List<MealItem> list1 = db.mealtDao().getByName(name);
                         for(MealItem item : list1)
-                            totalWeight += item.weight;
-                        mealListItems.add(new MealListItem(name, totalWeight, list1));
+                            totalValue += item.value;
+                        mealListItems.add(new MealListItem(name, totalValue, list1));
                         handler.sendEmptyMessage(1);
                     }
                 }
@@ -134,6 +129,17 @@ public class MainFragment extends Fragment {
         adapter.setList(mealListItems);
         recyclerView.setAdapter(adapter);
 
+    }
+    private void threadSleep(){
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(500);
+                new MyThread().start();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
     }
 
 }

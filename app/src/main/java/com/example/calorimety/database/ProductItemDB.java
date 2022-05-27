@@ -3,7 +3,6 @@ package com.example.calorimety.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -17,7 +16,7 @@ public class ProductItemDB {
     public String group_name;
 
 
-    public ProductItemDB(String name, float value, String group_name) {
+    public ProductItemDB(@NonNull String name, float value, String group_name) {
         this.name = name;
         this.value = value;
         this.group_name = group_name;

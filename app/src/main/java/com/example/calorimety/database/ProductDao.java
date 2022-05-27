@@ -23,12 +23,5 @@ public interface ProductDao {
     @Query("SELECT * FROM ProductItemDB WHERE group_name =:name")
     List<ProductItemDB> getProducts(String name);
 
-    @Query("SELECT * FROM ProductItemDB WHERE group_name =:name AND name = 'void'")
-    List<ProductItemDB> getVoidProducts(String name);
-
-
-
-
-
 
 }

@@ -9,8 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.calorimety.R;
-import com.example.calorimety.database.MealItem;
-import com.example.calorimety.domain.ProductItem;
+import com.example.calorimety.database.MealItem;;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +26,13 @@ public class ShowMealAdapter extends RecyclerView.Adapter<ProductHolder> {
         return new ProductHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
         MealItem mealItem = list.get(position);
         holder.name.setText(mealItem.name);
-        holder.weight.setText(mealItem.weight + " г");
-        holder.kcal.setText(mealItem.value + " ккал");
+        holder.weight.setText(String.format("%.2f", mealItem.weight) + " г");
+        holder.kcal.setText(String.format("%.2f", mealItem.value) + " ккал");
     }
 
     @Override

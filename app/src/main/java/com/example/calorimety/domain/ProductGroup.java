@@ -6,9 +6,9 @@ import java.util.List;
 
 public class ProductGroup {
 
-    private int id;
-    private String group_name;
-    private List<Product> productList;
+    private final int id;
+    private final String group_name;
+    private final List<Product> productList;
 
     public ProductGroup(int id, String group_name, List<Product> productList) {
         this.id = id;

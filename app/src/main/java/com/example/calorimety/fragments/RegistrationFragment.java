@@ -23,12 +23,8 @@ import com.example.calorimety.domain.User;
 import com.example.calorimety.rest.CalorimetryApiVolley;
 import com.example.calorimety.rest.ServerCallbackUser;
 
-import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
-import java.util.Arrays;
+
 import java.util.Base64;
 
 import javax.crypto.SecretKeyFactory;
@@ -66,7 +62,7 @@ public class RegistrationFragment extends Fragment {
                             byte[] hash = factory.generateSecret(spec).getEncoded();
                             Base64.Encoder enc = Base64.getEncoder();
                             apiVolley.addUser(new User(name, enc.encodeToString(hash)), () -> {
-                                preferences = getContext().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
+                                preferences = requireContext().getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = preferences.edit();
                                 apiVolley.getUser(name, new ServerCallbackUser() {
                                     @Override
@@ -74,7 +70,7 @@ public class RegistrationFragment extends Fragment {
                                         editor.putInt("userid", user.getId());
                                         editor.putString("username", name).apply();
                                         Toast.makeText(getContext(), "Вход выполнен", Toast.LENGTH_SHORT).show();
-                                        ((MainActivity)getContext()).changeFragmentNav(R.id.main_to_inAccount, R.id.inAccount_to_main);
+                                        ((MainActivity)requireContext()).changeFragmentNav(R.id.main_to_inAccount, R.id.inAccount_to_main);
                                         Navigation.findNavController(view).navigate(R.id.reg_to_inAccount);
                                     }
 

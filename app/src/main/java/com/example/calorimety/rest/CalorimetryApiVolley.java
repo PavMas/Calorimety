@@ -5,14 +5,12 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.room.Room;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -35,7 +33,6 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,17 +47,11 @@ public class CalorimetryApiVolley implements CalorimetryApi {
     int requests = 0;
     int mRequests = 0;
 
-    List<ProductItemDB> voids;
 
     public CalorimetryApiVolley(Context context) {
         this.context = context;
     }
-    private final Response.ErrorListener errorListener = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.d("TSET1", "responseError");
-        }
-    };
+    private final Response.ErrorListener errorListener = error -> Log.d("TSET1", "responseError");
 
 
     @Override
@@ -106,7 +97,7 @@ public class CalorimetryApiVolley implements CalorimetryApi {
                     }
                     Log.d("DB_TEST", "end itters");
                 }
-                catch (JSONException e){
+                catch (JSONException ignore){
 
                 }
             }
@@ -185,7 +176,7 @@ public class CalorimetryApiVolley implements CalorimetryApi {
         }, errorListener){
             @NonNull
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 Map<String, String> map = new HashMap<>();
                 map.put("name", user.getName());
                 map.put("password", user.getPassword());
@@ -213,9 +204,8 @@ public class CalorimetryApiVolley implements CalorimetryApi {
         RequestQueue queue = Volley.newRequestQueue(context);
         String url = BASE_URL + "/user/"+id;
 
-        StringRequest request = new StringRequest(Request.Method.DELETE, url, response -> {
-            callback.onComplete();
-        }, errorListener);
+        StringRequest request = new StringRequest(Request.Method.DELETE, url, response ->
+            callback.onComplete(), errorListener);
         queue.add(request);
     }
 

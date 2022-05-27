@@ -1,7 +1,6 @@
 package com.example.calorimety.domain.mapper;
 
 
-import com.example.calorimety.domain.Product;
 import com.example.calorimety.domain.ProductItem;
 
 import org.json.JSONArray;

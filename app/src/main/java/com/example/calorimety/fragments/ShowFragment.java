@@ -14,15 +14,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.calorimety.R;
-import com.example.calorimety.adapter.ProductAdapter;
 import com.example.calorimety.adapter.ShowMealAdapter;
 import com.example.calorimety.classes.MealListItem;
 import com.example.calorimety.database.MealItem;
-import com.google.android.material.bottomappbar.BottomAppBar;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.List;
 
 

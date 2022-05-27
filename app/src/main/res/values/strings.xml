@@ -8,7 +8,7 @@
     <string name="hint_pass">Введите пароль</string>
     <string name="btn_signIn">Войти</string>
     <string name="btn_reg">Регестрация</string>
-    <string name="add_meal">New Meal</string>
+    <string name="add_meal">Новый прием пищи</string>
     <string name="meal_name">Название:</string>
     <string name="group_name">Название группы:</string>
     <string name="product_name">Название продукта:</string>

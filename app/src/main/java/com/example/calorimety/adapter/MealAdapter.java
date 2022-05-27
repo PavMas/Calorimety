@@ -17,10 +17,7 @@ import androidx.room.Room;
 
 import com.example.calorimety.R;
 import com.example.calorimety.classes.MealListItem;
-import com.example.calorimety.database.DatabaseCallback;
 import com.example.calorimety.database.MealDB;
-import com.example.calorimety.database.MealItem;
-import com.example.calorimety.database.ProductItemDB;
 import com.example.calorimety.rest.CalorimetryApiVolley;
 
 import java.util.List;
@@ -44,15 +41,14 @@ public class MealAdapter extends RecyclerView.Adapter<MealHolder> {
         return new MealHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint({"SetTextI18n", "DefaultLocale"})
     @Override
     public void onBindViewHolder(@NonNull MealHolder holder, int position) {
         MealListItem item = mealListItems.get(position);
         holder.name.setText(item.getMeal_name());
-        holder.value.setText(item.getTotalWeight()+" ккал");
-        holder.delete.setOnClickListener(view -> {
-            delete(item, position);
-        });
+        holder.value.setText(String.format("%.2f", item.getTotalWeight())+" ккал");
+        holder.delete.setOnClickListener(view ->
+            delete(item, position));
         holder.description.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
             bundle.putParcelable("mealData", item);

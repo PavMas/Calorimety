@@ -6,17 +6,18 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import android.os.Handler;
 import android.os.Message;
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,7 @@ public class AddMealFragment extends Fragment {
 
     Context context;
 
+    private ItemTouchHelper.SimpleCallback simpleItemTouchCallback;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,7 +86,7 @@ public class AddMealFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_add, container, false);
         init();
         db = Room.databaseBuilder(requireContext(), ProductDB.class, "productDB").build();
-        new MyThread().start();
+        threadSleep();
         addBtn.setOnClickListener(view1 -> {
             product = ((ProductItemDB) sp_products.getSelectedItem()).name;
             value = ((ProductItemDB) sp_products.getSelectedItem()).value;
@@ -97,23 +99,46 @@ public class AddMealFragment extends Fragment {
             else
                 Toast.makeText(context, "Введите данные полностью", Toast.LENGTH_SHORT).show();
         });
+        simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                if(direction == ItemTouchHelper.RIGHT) {
+                    products.remove(position);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
         saveBtn.setOnClickListener(view1 -> {
                 String mealName = name.getText().toString();
                 if (products.size() != 0 && !mealName.equals("")) {
                     preferences = context.getSharedPreferences(MainActivity.SP_NAME, Context.MODE_PRIVATE);
                     int uid = preferences.getInt("userid", 0);
-                    apiVolley.addMeal(new Meal(uid, mealName, products), () -> {
-                        handler.sendEmptyMessage(3);
-                    });
+                    apiVolley.addMeal(new Meal(uid, mealName, products), () ->
+                        handler.sendEmptyMessage(3));
                 }
                 else
                     Toast.makeText(context, "Введите данные полностью", Toast.LENGTH_SHORT).show();
         });
-        backBtn.setOnClickListener(view1 -> {
-            Navigation.findNavController(view1).navigate(R.id.action_addMealFragment_to_mainFragment);
-        });
+        backBtn.setOnClickListener(view1 ->
+            Navigation.findNavController(view1).navigate(R.id.action_addMealFragment_to_mainFragment));
         return  view;
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
     @SuppressLint("HandlerLeak")
     Handler handler = new Handler(){
         @Override
@@ -194,5 +219,16 @@ public class AddMealFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         adapter = new ProductAdapter();
         recyclerView.setAdapter(adapter);
+    }
+    private void threadSleep(){
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(500);
+                new MyThread().start();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.start();
     }
 }
